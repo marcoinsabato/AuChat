@@ -77,8 +77,8 @@ const app = new Vue({
 
         deleteMessage(e){
             console.log(e)
-            axios.post('/message/delete', {
-                message_id: e.message_id
+            axios.delete('/message/delete', {
+                data : e
             }).then(response => {
                 this.fetchMessages();
             });

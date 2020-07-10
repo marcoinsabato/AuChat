@@ -56114,8 +56114,8 @@ var app = new Vue({
       var _this4 = this;
 
       console.log(e);
-      axios.post('/message/delete', {
-        message_id: e.message_id
+      axios["delete"]('/message/delete', {
+        data: e
       }).then(function (response) {
         _this4.fetchMessages();
       });

@@ -58,9 +58,8 @@ class ChatsController extends Controller
 
     public function deleteMessage(Request $request){
 
-        dd($request->all());
         $user = Auth::user();
-        $message = Message::findOrFail($request->message_id)->first();
+        $message = Message::where('id' , $request->message_id)->first();
         $message->delete();
 
         broadcast(new MessageDeleted($user))->toOthers();
