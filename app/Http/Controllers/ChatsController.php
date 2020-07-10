@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Message;
 use App\Events\MessageSent;
 use Illuminate\Http\Request;
+use App\Events\MessageDeleted;
 use Illuminate\Support\Facades\Auth;
 
 class ChatsController extends Controller
@@ -31,7 +32,7 @@ class ChatsController extends Controller
      */
     public function fetchMessages()
     {
-    return Message::with('user')->get();
+        return Message::with('user')->get();
     }
 
     /**
@@ -48,8 +49,23 @@ class ChatsController extends Controller
             'message' => $request->input('message')
         ]);
 
+        $id = $message->id;
+
         broadcast(new MessageSent($user, $message))->toOthers();
 
-        return ['status' => 'Message Sent!'];
+        return response()->json($id);
+    }
+
+    public function deleteMessage(Request $request){
+
+        dd($request->all());
+        $user = Auth::user();
+        $message = Message::findOrFail($request->message_id)->first();
+        $message->delete();
+
+        broadcast(new MessageDeleted($user))->toOthers();
+
+        return ['status' => 'Message Deleted!'];
+
     }
 }

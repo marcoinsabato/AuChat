@@ -1966,8 +1966,50 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['messages']
+  props: ['messages', 'user'],
+  mounted: function mounted() {
+    var _this = this;
+
+    setTimeout(function () {
+      _this.lastMessage();
+    }, 500);
+  },
+  methods: {
+    lastMessage: function lastMessage() {
+      var self = this;
+      var element = document.getElementById("last");
+      element.scrollIntoView();
+    },
+    deleteMessage: function deleteMessage(id) {
+      console.log(id);
+      this.$emit('messagedeleted', {
+        message_id: id
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -43697,28 +43739,81 @@ var render = function() {
   return _c(
     "ul",
     { staticClass: "chat", attrs: { id: "msgs" } },
-    _vm._l(_vm.messages, function(message) {
-      return _c("li", { key: message.index, staticClass: "right" }, [
-        _c("div", { staticClass: "chat-body px-3" }, [
-          _c("div", { staticClass: "header" }, [
-            _c("strong", { staticClass: "primary-font" }, [
-              _vm._v(
-                "\n                    " +
-                  _vm._s(message.user.name) +
-                  "\n                "
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("p", [
-            _vm._v(
-              "\n                " + _vm._s(message.message) + "\n            "
-            )
-          ])
-        ])
-      ])
-    }),
-    0
+    [
+      _vm._l(_vm.messages, function(message) {
+        return _c(
+          "li",
+          { key: message.id, on: { messagesent: _vm.lastMessage } },
+          [
+            message.user.id === _vm.user.id
+              ? [
+                  _c("div", { staticClass: "chat-body px-3 text-right" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "close",
+                        attrs: { type: "button", "aria-label": "Close" },
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteMessage(message.id)
+                          }
+                        }
+                      },
+                      [
+                        _c("span", { attrs: { "aria-hidden": "true" } }, [
+                          _vm._v("×")
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "header" }, [
+                      _c("strong", { staticClass: "primary-font" }, [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(message.user.name) +
+                            "\n                    "
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(message.message) +
+                          "\n                "
+                      )
+                    ])
+                  ])
+                ]
+              : [
+                  _c("div", { staticClass: "chat-body px-3 text-left" }, [
+                    _c("div", { staticClass: "header" }, [
+                      _c("strong", { staticClass: "primary-font" }, [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(message.user.name) +
+                            "\n                    "
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(message.message) +
+                          "\n                "
+                      )
+                    ])
+                  ])
+                ]
+          ],
+          2
+        )
+      }),
+      _vm._v(" "),
+      _c("div", { attrs: { id: "last" } })
+    ],
+    2
   )
 }
 var staticRenderFns = []
@@ -55982,10 +56077,14 @@ var app = new Vue({
     var _this = this;
 
     this.fetchMessages();
+    Echo["private"]('chat').listen('MessageDeleted', function (e) {
+      console.log(e);
+    });
     Echo["private"]('chat').listen('MessageSent', function (e) {
       _this.messages.push({
         message: e.message.message,
-        user: e.user
+        user: e.user,
+        id: e.message.id
       });
     });
   },
@@ -55994,13 +56093,31 @@ var app = new Vue({
       var _this2 = this;
 
       axios.get('/messages').then(function (response) {
+        console.log("richiedo messaggi");
         _this2.messages = response.data;
       });
     },
     addMessage: function addMessage(message) {
-      this.messages.push(message);
+      var _this3 = this;
+
       axios.post('/messages', message).then(function (response) {
+        _this3.messages.push({
+          message: message.message,
+          user: message.user,
+          id: response.data
+        });
+
         console.log(response.data);
+      });
+    },
+    deleteMessage: function deleteMessage(e) {
+      var _this4 = this;
+
+      console.log(e);
+      axios.post('/message/delete', {
+        message_id: e.message_id
+      }).then(function (response) {
+        _this4.fetchMessages();
       });
     }
   }

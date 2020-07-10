@@ -41,27 +41,46 @@ const app = new Vue({
 
     created() {
         this.fetchMessages();
+        Echo.private('chat').listen('MessageDeleted', (e) => {
+            console.log(e);
+        });
         Echo.private('chat')
-            .listen('MessageSent', (e) => {
+            .listen('MessageSent', (e) => {     
                 this.messages.push({
                 message: e.message.message,
-                user: e.user
-                });
+                user: e.user,
+                id: e.message.id
             });
+        });
+
     },
 
     methods: {
         fetchMessages() {
             axios.get('/messages').then(response => {
+                console.log("richiedo messaggi")
                 this.messages = response.data;
             });
         },
 
         addMessage(message) {
-            this.messages.push(message);
 
             axios.post('/messages', message).then(response => {
-              console.log(response.data);
+                this.messages.push({
+                    message: message.message ,
+                    user : message.user,
+                    id : response.data
+                });
+                console.log(response.data);
+            });
+        },
+
+        deleteMessage(e){
+            console.log(e)
+            axios.post('/message/delete', {
+                message_id: e.message_id
+            }).then(response => {
+                this.fetchMessages();
             });
         }
     }
