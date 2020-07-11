@@ -42,7 +42,7 @@ const app = new Vue({
     created() {
         this.fetchMessages();
         Echo.private('chat').listen('MessageDeleted', (e) => {
-            console.log(e);
+            this.fetchMessages();
         });
         Echo.private('chat')
             .listen('MessageSent', (e) => {     
@@ -76,7 +76,6 @@ const app = new Vue({
         },
 
         deleteMessage(e){
-            console.log(e)
             axios.delete('/message/delete', {
                 data : e
             }).then(response => {

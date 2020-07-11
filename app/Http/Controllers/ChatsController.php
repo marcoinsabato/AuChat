@@ -53,15 +53,17 @@ class ChatsController extends Controller
 
         broadcast(new MessageSent($user, $message))->toOthers();
 
-        return response()->json($id);
+        return $id;
     }
 
     public function deleteMessage(Request $request){
 
         $user = Auth::user();
+
         $message = Message::where('id' , $request->message_id)->first();
         $message->delete();
 
+        dd(broadcast(new MessageDeleted($user))->toOthers());
         broadcast(new MessageDeleted($user))->toOthers();
 
         return ['status' => 'Message Deleted!'];

@@ -2004,7 +2004,6 @@ __webpack_require__.r(__webpack_exports__);
       element.scrollIntoView();
     },
     deleteMessage: function deleteMessage(id) {
-      console.log(id);
       this.$emit('messagedeleted', {
         message_id: id
       });
@@ -56078,7 +56077,7 @@ var app = new Vue({
 
     this.fetchMessages();
     Echo["private"]('chat').listen('MessageDeleted', function (e) {
-      console.log(e);
+      _this.fetchMessages();
     });
     Echo["private"]('chat').listen('MessageSent', function (e) {
       _this.messages.push({
@@ -56113,7 +56112,6 @@ var app = new Vue({
     deleteMessage: function deleteMessage(e) {
       var _this4 = this;
 
-      console.log(e);
       axios["delete"]('/message/delete', {
         data: e
       }).then(function (response) {

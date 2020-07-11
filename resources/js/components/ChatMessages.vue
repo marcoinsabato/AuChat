@@ -56,7 +56,6 @@
             element.scrollIntoView();
         },
         deleteMessage(id){
-            console.log(id)
             this.$emit('messagedeleted', {
                 message_id: id
             });
