@@ -43,6 +43,7 @@ const app = new Vue({
         this.fetchMessages();
         Echo.private('chat').listen('MessageDeleted', (e) => {
             this.fetchMessages();
+            this.scrolldown();
         });
         Echo.private('chat')
             .listen('MessageSent', (e) => {     
@@ -51,6 +52,7 @@ const app = new Vue({
                 user: e.user,
                 id: e.message.id
             });
+            this.scrolldown();
         });
 
     },
@@ -58,9 +60,15 @@ const app = new Vue({
     methods: {
         fetchMessages() {
             axios.get('/messages').then(response => {
-                console.log("richiedo messaggi")
                 this.messages = response.data;
             });
+        },
+
+        scrolldown(){
+            setTimeout(() => {
+                let container = document.getElementById("chat-window");
+                container.scrollTop = container.scrollHeight;
+            }, 100);
         },
 
         addMessage(message) {
@@ -71,7 +79,7 @@ const app = new Vue({
                     user : message.user,
                     id : response.data
                 });
-                console.log(response.data);
+                this.scrolldown();
             });
         },
 
@@ -80,6 +88,7 @@ const app = new Vue({
                 data : e
             }).then(response => {
                 this.fetchMessages();
+                this.scrolldown();
             });
         }
     }

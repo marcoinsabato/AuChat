@@ -63,7 +63,6 @@ class ChatsController extends Controller
         $message = Message::where('id' , $request->message_id)->first();
         $message->delete();
 
-        dd(broadcast(new MessageDeleted($user))->toOthers());
         broadcast(new MessageDeleted($user))->toOthers();
 
         return ['status' => 'Message Deleted!'];

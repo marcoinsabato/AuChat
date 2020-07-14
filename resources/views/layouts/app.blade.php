@@ -75,6 +75,13 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+        <footer id="sticky-footer" class="py-4 text-dark
+         fixed-bottom">
+            <div class="container text-center ">
+              <h4 class="m-0 font-weight-bold">Powered By <a class="text-warning" href="https://aulab.it/" target="_blank" rel="noopener noreferrer">Aulab</a></h4>
+            </div>
+          </footer>
     </div>
 
     @stack('lowscript')

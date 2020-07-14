@@ -46,12 +46,11 @@
     mounted() {
         setTimeout(() => {
             this.lastMessage()
-        }, 500);
+        }, 200);
     },
 
     methods: {
         lastMessage: function () {
-            let self = this;
             let element = document.getElementById("last");
             element.scrollIntoView();
         },
