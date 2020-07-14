@@ -16,10 +16,10 @@
 
 per prima cosa creiamo il progetto laravel implementando già lo scaffolding con Vue e l’auteticazione e richiediamo pusher tramite composer.</p>
 <code>
-    laravel new laravel-chat
-    composer require laravel/ui
-    php artisan ui vue --auth
-    composer require pusher/pusher-php-server
+    laravel new laravel-chat <br>
+    composer require laravel/ui<br>
+    php artisan ui vue --auth<br>
+    composer require pusher/pusher-php-server<br>
 </code>
 
 <p>Andiamo per prima cosa a impostare il nostro .env con le credenziali prima create e come vedete troveremo già di default i campi da compilare impostiamo inoltre il <b>BROADCAST_DRIVER=pusher</b></p>
@@ -27,16 +27,16 @@ per prima cosa creiamo il progetto laravel implementando già lo scaffolding con
 <p>Adesso andiamo a configurare il nostro ambiente, per prima cosa in <b>config/app.php</b>  decommentiamo  <b>App\Providers\BroadcastServiceProvider</b> 
 Andiamo ad aprire adesso config/broadcasting.php e +decommentiamo il codice che laravel ci da commentato</p>
 <code>
-      'pusher' => [
-          'driver' => 'pusher',
-          'key' => env('PUSHER_APP_KEY'),
-          'secret' => env('PUSHER_APP_SECRET'),
-          'app_id' => env('PUSHER_APP_ID'),
-          'options' => [
-              'cluster' => env('PUSHER_CLUSTER'),
-              'encrypted' => true,
-          ],
-      ],
+      'pusher' => [ <br>
+          'driver' => 'pusher', <br>
+          'key' => env('PUSHER_APP_KEY'), <br>
+          'secret' => env('PUSHER_APP_SECRET'),<br>
+          'app_id' => env('PUSHER_APP_ID'),<br>
+          'options' => [<br>
+              'cluster' => env('PUSHER_CLUSTER'),<br>
+              'encrypted' => true,<br>
+          ],<br>
+      ],<br>
 </code>
 
 <p>Dobbiamo adesso creare il database che ci servirà per i nostri utenti e i messaggi. 
@@ -296,6 +296,7 @@ ChatMessages.vue
 
 
 ChatForm.vue
+<code>
     <template>
         <div class="input-group input-group-lg">
             <input id="btn-input" type="text" name="message" class="form-control" placeholder="Type your message here..." v-model="newMessage" @keyup.enter="sendMessage">
@@ -325,7 +326,7 @@ ChatForm.vue
             }    
         }
     </script>
-
+</code>
 e registriamo i componenti in resources/app.js 
 
 
