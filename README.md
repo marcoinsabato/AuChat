@@ -296,7 +296,7 @@ ChatMessages.vue
 
 
 ChatForm.vue
-<code>
+
     <template>
         <div class="input-group input-group-lg">
             <input id="btn-input" type="text" name="message" class="form-control" placeholder="Type your message here..." v-model="newMessage" @keyup.enter="sendMessage">
@@ -326,7 +326,7 @@ ChatForm.vue
             }    
         }
     </script>
-</code>
+
 e registriamo i componenti in resources/app.js 
 
 
